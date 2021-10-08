@@ -25,10 +25,12 @@
     labels:
       traefik.http.routers.minio.tls: "true"
       traefik.http.services.minio.loadbalancer.server.port: "9000"
-    command: server /data
+    command: server --console-address ":9003" /data
+    published_ports:
+      - 9000:9000
     env:
-        MINIO_ACCESS_KEY: "{{ minioAccessKey }}"
-        MINIO_SECRET_KEY: "{{ minioSecretKey }}"
+        MINIO_ROOT_USER: "{{ minioAccessKey }}"
+        MINIO_ROOT_PASSWORD: "{{ minioSecretKey }}"
     volumes:
       - /opt/external/minioSplunk/:/data:Z
     log_driver: splunk

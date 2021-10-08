@@ -27,9 +27,10 @@
 
 - name: Install pip
   yum:
-    name: python-pip
+    name: python3-pip
     state: latest
 
 - name: Install Docker-py
   pip:
     name: docker-py
+    executable: pip3.6

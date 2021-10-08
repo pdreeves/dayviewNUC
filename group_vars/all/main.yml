@@ -1,6 +1,9 @@
 ---
 
-# Base config vars
+# baseConfig
 sshKeys: ['nuc.greentangent.net.pub']
 sshKeypath: /root/.ssh/
 setSSHKeyLogin: true
+
+# formatDisk
+overWritePartition: false

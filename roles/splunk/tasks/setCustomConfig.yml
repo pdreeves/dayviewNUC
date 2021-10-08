@@ -1,0 +1,11 @@
+---
+
+- name: Copy custom app files to container
+  template:
+    src: "{{ item }}.j2"
+    dest: "/opt/splunk/greentangent-container/local/{{ item }}"
+    mode: 0644
+  notify: Restart Splunk in container
+  with_items:
+    - "{{ splunkConfFiles }}"
+    - "local.meta"

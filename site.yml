@@ -12,3 +12,4 @@
     - portainer
     - traefik
     - minio
+    - splunk

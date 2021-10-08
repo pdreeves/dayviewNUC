@@ -7,3 +7,11 @@ setSSHKeyLogin: true
 
 # formatDisk
 overWritePartition: false
+
+# splunk
+rebuildSplunkImage: false
+forceSplunkSource: false
+splunkConfFiles: ['indexes.conf', 'inputs.conf', 'limits.conf', 'props.conf', 'restmap.conf', 'server.conf']
+remoteStorageVolumePath: minio-splunk
+remoteStorageVolumeEndpoint: minio.dayview.greentangent.net
+remoteStorageVolume: minio-splunk

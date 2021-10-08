@@ -1,0 +1,95 @@
+# General settings
+[default]
+tsidxWritingLevel = 4
+lastChanceIndex = main
+frozenTimePeriodInSecs = 31540000
+homePath   = /opt/splunk/var/lib/splunk/$_index_name/db
+coldPath   = /opt/splunk/var/lib/splunk/$_index_name/colddb
+thawedPath = /opt/splunk/var/lib/splunk/$_index_name/thaweddb0000
+maxConcurrentOptimizes = 4
+journalCompression = zstd
+maxHotSpanSecs = 86400
+
+[volume:{{ remoteStorageVolume }}]
+storageType = remote
+path = s3://{{ remoteStorageVolumePath }}
+remote.s3.access_key = {{ remoteStorageVolumeHostnameAccessKey }}
+remote.s3.secret_key = {{ remoteStorageVolumeHostnameSecretKey }}
+remote.s3.endpoint = https://{{ remoteStorageVolumeEndpoint }}
+remote.s3.supports_versioning = false
+remote.s3.signature_version = v2
+
+# Default indexes
+[main]
+homePath = /opt/splunk/var/lib/splunk/defaultdb/db
+coldPath = /opt/splunk/var/lib/splunk/defaultdb/colddb
+thawedPath = /opt/splunk/var/lib/splunk/defaultdb/thaweddb
+frozenTimePeriodInSecs = 604800
+maxTotalDataSizeMB = 5000
+maxHotSpanSecs = 86400
+maxTotalDataSizeMB = 100000000
+remotePath = volume:{{ remoteStorageVolume }}/main
+
+[_internal]
+homePath = /opt/splunk/var/lib/splunk/_internaldb/db
+coldPath = /opt/splunk/var/lib/splunk/_internaldb/colddb
+thawedPath = /opt/splunk/var/lib/splunk/_internaldb/thaweddb
+frozenTimePeriodInSecs = 189302400
+remotePath = volume:{{ remoteStorageVolume }}/_internal
+maxHotSpanSecs = 86400
+maxTotalDataSizeMB = 100000000
+
+[_audit]
+homePath = /opt/splunk/var/lib/splunk/audit/db
+coldPath = /opt/splunk/var/lib/splunk/audit/colddb
+thawedPath = /opt/splunk/var/lib/splunk/audit/thaweddb
+frozenTimePeriodInSecs = 189302400
+remotePath = volume:{{ remoteStorageVolume }}/_audit
+maxHotSpanSecs = 86400
+maxTotalDataSizeMB = 100000000
+
+[_introspection]
+homePath = /opt/splunk/var/lib/splunk/_introspection/db
+coldPath = /opt/splunk/var/lib/splunk/_introspection/colddb
+thawedPath = /opt/splunk/var/lib/splunk/_introspection/thaweddb
+frozenTimePeriodInSecs = 189302400
+remotePath = volume:{{ remoteStorageVolume }}/_introspection
+maxHotSpanSecs = 86400
+maxTotalDataSizeMB = 100000000
+
+# Custom indexes for home lab
+[app]
+remotePath = volume:{{ remoteStorageVolume }}/app
+
+[app-metrics]
+remotePath = volume:{{ remoteStorageVolume }}/app-metrics
+datatype = metric
+metric.timestampResolution = s
+
+[netflow]
+remotePath = volume:{{ remoteStorageVolume }}/netflow
+
+[network]
+remotePath = volume:{{ remoteStorageVolume }}/network
+
+[os]
+remotePath = volume:{{ remoteStorageVolume }}/os
+
+[containers]
+remotePath = volume:{{ remoteStorageVolume }}/containers
+
+[application]
+remotePath = volume:{{ remoteStorageVolume }}/application
+
+[home]
+remotePath = volume:{{ remoteStorageVolume }}/home
+
+
+# Scrap index
+[scrap]
+frozenTimePeriodInSecs = 189302400
+
+[scrap-metrics]
+frozenTimePeriodInSecs = 189302400
+datatype = metric
+metric.timestampResolution = s

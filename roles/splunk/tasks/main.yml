@@ -1,0 +1,6 @@
+---
+
+- import_tasks: buildContainer.yml
+- import_tasks: setCustomConfig.yml
+- import_tasks: configureThirdPartyApps.yml
+

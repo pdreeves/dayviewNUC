@@ -1,0 +1,42 @@
+---
+
+- name: Create minio Splunk directory
+  file:
+    path: /opt/external/minioSplunk/
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Manage minio image
+  docker_image:
+    state: present
+    name: minio/minio
+    force_source: yes
+    source: pull
+
+- name: Create minio Container
+  docker_container:
+    detach: true
+    name: minio
+    image: minio/minio
+    state: started
+    restart_policy: unless-stopped
+    labels:
+      traefik.http.routers.minio.tls: "true"
+      traefik.http.services.minio.loadbalancer.server.port: "9000"
+    command: server /data
+    env:
+        MINIO_ACCESS_KEY: "{{ minioAccessKey }}"
+        MINIO_SECRET_KEY: "{{ minioSecretKey }}"
+    volumes:
+      - /opt/external/minioSplunk/:/data:Z
+    log_driver: splunk
+    log_options:
+      splunk-token: "{{ splunkContainerHECToken }}"
+      splunk-url: https://splunk.greentangent.net:8088
+      splunk-insecureskipverify: true
+      splunk-index: containers
+      splunk-source: minio
+      splunk-sourcetype: syslog
+      splunk-verify-connection: false

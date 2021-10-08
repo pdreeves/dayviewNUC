@@ -11,3 +11,4 @@
     - docker
     - portainer
     - traefik
+    - minio

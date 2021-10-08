@@ -1,0 +1,15 @@
+---
+
+- name: Install All Non-Kernel Updates
+  yum:
+    name: "*"
+    exclude: kernel*
+    state: latest
+    lock_timeout: 600
+
+- name: Install Kernel Updates
+  yum:
+    name: "kernel*"
+    state: latest
+    lock_timeout: 600
+  notify: Restart Machine

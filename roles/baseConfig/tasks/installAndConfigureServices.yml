@@ -1,0 +1,109 @@
+---
+
+- name: Install Yum Packages
+  yum:
+    name: "{{ query('flattened', ['{{ packagesToInstall }}']) }}"
+    state: latest
+    lock_timeout: 600
+
+- name: Install AIDE
+  yum:
+    name: aide
+    state: present
+    lock_timeout: 600
+  notify: Run AIDE Initialization
+
+- name: Set Banner
+  copy:
+    src: banner
+    dest: /etc/banner
+    owner: root
+    group: root
+    mode: 0744
+  notify: Restart ssh
+
+- name: Enable SSH settings
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    line: "{{ item }}"
+  notify: Restart ssh
+  with_items:
+    - "{{ sshSettingsPresent }}"
+
+- name: Disable SSH Settings
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    state: absent
+    line: "{{ item }}"
+  notify: Restart ssh
+  with_items:
+    - "{{ sshSettingsAbsent }}"
+
+- name: Add SSH Key Login
+  authorized_key:
+    user: "{{ansible_user}}"
+    state: present
+    key: "{{lookup('file', '{{sshKeypath}}{{item}}')}} "
+  with_items:
+    - "{{sshKeys}}"
+
+- name: Configure AIDE
+  template:
+    src: aide.conf.j2
+    dest: /etc/aide.conf
+    owner: root
+    group: root
+    mode: 0744
+  notify: Run AIDE Check
+
+- name: Automate AIDE Check
+  cron:
+    name: "Run AIDE Check"
+    job: "/usr/sbin/aide --check"
+    minute: "15"
+    hour: "8"
+    weekday: "*"
+
+- name: Configure rkhunter
+  template:
+    src: rkhunter.conf.j2
+    dest: /etc/rkhunter.conf
+    owner: root
+    group: root
+    mode: 0744
+  notify: Update and Run rkhunter
+
+- name: Automate rkhunter Update
+  cron:
+    name: "Update rkhunter"
+    job: "rkhunter --update"
+    minute: "45"
+    hour: "21"
+    weekday: "*"
+  changed_when: false
+
+- name: Automate rkhunter Run
+  cron:
+    name: "Update rkhunter"
+    job: "rkhunter --cronjob --report-warnings-only"
+    minute: "15"
+    hour: "9"
+    weekday: "*"
+  changed_when: false
+
+- name: Enable Services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - "{{ servicesToEnable }}"
+
+- name: Disable Services
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  with_items:
+    - "{{ servicesToDisable }}"

@@ -1,0 +1,11 @@
+---
+
+# All hosts Group
+all:
+  hosts:
+    nuc:
+      ansible_host: 192.168.71.200
+      instanceName: nuc.dayview.greentangent.net
+      shortHostName: nuc
+      become_user: root
+      ansible_user: centos

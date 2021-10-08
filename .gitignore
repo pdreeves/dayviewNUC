@@ -1,0 +1,4 @@
+*.retry
+*.pem
+*.DS_Store
+splunk.License

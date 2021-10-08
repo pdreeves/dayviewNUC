@@ -1,0 +1,7 @@
+---
+
+- import_tasks: configureEPEL.yml
+- import_tasks: removeUnwantedPackages.yml
+- import_tasks: installAndConfigureServices.yml
+- import_tasks: hostSettings.yml
+- import_tasks: update.yml

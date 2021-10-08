@@ -1,0 +1,8 @@
+---
+
+- name: Install EPEL
+  yum:
+    name: epel-release
+    state: latest
+    use_backend: yum
+    lock_timeout: 300

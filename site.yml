@@ -10,3 +10,4 @@
     - formatDisk
     - docker
     - portainer
+    - traefik

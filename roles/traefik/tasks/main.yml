@@ -1,0 +1,60 @@
+---
+
+- name: Create Traefik Config Directory
+  file:
+    path: /opt/traefik/
+    state: directory
+
+- name: Copy Certificate to NUC
+  copy:
+    src: cert.pem
+    dest: /opt/traefik/traefik.crt
+
+- name: Copy Private Key to NUC
+  copy:
+    src: privkey.pem
+    dest: /opt/traefik/traefik.key
+
+- name: Create Traefik Config Files
+  copy:
+    src: "{{ item }}"
+    dest: "/opt/traefik/{{ item }}"
+  with_items:
+    - traefik.yml
+    - tlsTraefik.yml
+
+- name: Manage Traefik Image
+  docker_image:
+    state: present
+    name: traefik
+    force_source: yes
+    source: pull
+
+- name: Create Traefik Container
+  docker_container:
+    detach: true
+    name: traefik
+    image: traefik
+    labels:
+      traefik.http.routers.traefik.tls: "true"
+      traefik.http.services.traefik.loadbalancer.server.port: "8080"
+    state: started
+    privileged: true
+    restart_policy: unless-stopped
+    log_driver: splunk
+    log_options:
+      splunk-token: "{{ splunkContainerHECToken }}"
+      splunk-url: https://splunk.greentangent.net:8088
+      splunk-insecureskipverify: true
+      splunk-index: containers
+      splunk-source: traefik
+      splunk-sourcetype: syslog
+      splunk-verify-connection: false
+    published_ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    volumes:
+      - /opt/traefik/traefik.yml:/etc/traefik/traefik.yml
+      - /opt/traefik/:/opt/external/
+      - /var/run/docker.sock:/var/run/docker.sock:ro

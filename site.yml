@@ -8,3 +8,4 @@
   roles:
     - baseConfig
     - formatDisk
+    - docker

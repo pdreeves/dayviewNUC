@@ -1,0 +1,45 @@
+---
+
+- name: Copy fixVarLogPermissions service
+  copy:
+    src: fixVarLogPermissions.service
+    dest: /etc/systemd/system/fixVarLogPermissions.service
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Enable fixVarLogPermissions service
+  systemd:
+    name: fixVarLogPermissions
+    enabled: yes
+
+- name: Fix Directory Permissions
+  file:
+    path: "{{item}}"
+    owner: splunk
+    group: splunk
+    mode: 0755
+    state: directory
+  with_items:
+    - /opt/splunkforwarder/var
+    - /opt/splunkforwarder/var/lib
+    - /opt/splunkforwarder/var/lib/splunk
+
+- name: Set Permissions on /var/log Directories
+  acl:
+    path: /var/log
+    entity: splunk
+    etype: user
+    permissions: rx
+    default: yes
+    recursive: yes
+    state: present
+
+- name: Set Permissions on /var/log Directories
+  acl:
+    path: /var/log
+    entity: splunk
+    etype: user
+    permissions: rx
+    recursive: yes
+    state: present

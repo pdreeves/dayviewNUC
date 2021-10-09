@@ -13,3 +13,4 @@
     - traefik
     - minio
     - splunk
+    - universalForwarder

@@ -1,0 +1,22 @@
+---
+
+- name: Create Splunk standardForwarder App Folder
+  file:
+    path: /opt/splunkforwarder/etc/apps/greentangent-standardForwarder/local/
+    owner: splunk
+    group: splunk
+    mode: 0744
+    state: directory
+
+- name: Copy custom app files to host
+  template:
+    src: "{{ item }}.j2"
+    dest: "/opt/splunkforwarder/etc/apps/greentangent-standardForwarder/local/{{item}}"
+    mode: 0644
+    owner: splunk
+    group: splunk
+  register: confFilesChanged
+  notify: Restart splunkforwarder
+  with_items:
+    - inputs.conf
+    - outputs.conf

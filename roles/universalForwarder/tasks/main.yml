@@ -1,0 +1,6 @@
+---
+
+- import_tasks: installSplunkUniversalForwarder.yml
+- import_tasks: setCustomConfig.yml
+- import_tasks: configureThirdPartyApps.yml
+- import_tasks: fixVarLogPermissions.yml

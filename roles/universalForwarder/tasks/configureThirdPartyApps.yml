@@ -1,0 +1,69 @@
+---
+
+- name: Create Splunk standardForwarder App Folder
+  file:
+    path: /opt/splunkforwarder/customApps/
+    owner: splunk
+    group: splunk
+    mode: 0744
+    state: directory
+  notify: Restart splunkforwarder
+
+- name: Find all apps to install
+  delegate_to: localhost
+  find:
+    paths: roles/universalForwarder/files/apps/
+    patterns: '*.tgz'
+  notify: Restart splunkforwarder
+  register: ufAppsToDeploy
+
+- name: Copy app to deploy to server
+  copy:
+    dest: "/opt/splunkforwarder/customApps/{{ item['path'][36:] }}"
+    src: "{{ item['path']  }}"
+  with_items: 
+    - "{{ ufAppsToDeploy['files'] }}"
+
+- name: Uncompress ufAppsToDeploy
+  shell: "tar zxf /opt/splunkforwarder/customApps/{{ item['path'][36:] }} -C /opt/splunkforwarder/customApps/"
+  with_items: "{{ ufAppsToDeploy['files'] }}"
+
+- name: Find all apps to remove files from
+  find:
+    paths: /opt/splunkforwarder/customApps/
+    file_type: directory
+  register: ufAppsDeploying
+
+- name: Remove un-needed files from app
+  ignore_errors: true
+  file:
+    path: "{{ item[0]['path'] }}/{{ item[1] }}"
+    state: absent
+  with_nested:
+    - "{{ ufAppsDeploying['files'] }}"
+    - ['default/database.conf', 'default/eventgen.conf', 'default/indexes.conf', 'samples', 'default/web.conf']
+
+- name: Copy local files from deployment-apps folder to new app directory
+  copy:
+    src: "/opt/splunkforwarder/etc/apps/{{ item['path'][32:] }}/local"
+    dest: "/opt/splunkforwarder/customApps/{{ item['path'][32:] }}/"
+    owner: splunk
+    group: splunk
+    mode: 0755
+  ignore_errors: true
+  with_items:
+    - "{{ ufAppsDeploying['files'] }}"
+
+- name: Copy new app to apps folder
+  shell: "cp -R /opt/splunkforwarder/customApps/{{ item['path'][32:] }} /opt/splunkforwarder/etc/apps/"
+  with_items:
+    - "{{ ufAppsDeploying['files'] }}"
+
+- name: Set owner and group on apps folder
+  shell: "chown -R splunk:splunk /opt/splunkforwarder/etc/apps"
+
+- name: Set permissions on apps folder
+  shell: "chmod -R 755 /opt/splunkforwarder/etc/apps"
+
+- name: Remove all apps from server
+  shell: rm -rf /opt/splunkforwarder/customApps/*

@@ -1,0 +1,67 @@
+---
+
+- name: Check If Splunk Forwarder is Already Installed
+  yum:
+    name: splunkforwarder.x86_64
+    state: present
+  register: splunkUFInstalled
+  ignore_errors: true
+
+- name: Download Splunk Universal Forward Binary
+  get_url:
+    url: "{{ splunkUFRPMURL }}"
+    dest: /tmp/splunkUF.rpm
+  when: splunkUFInstalled is failed
+
+- name: Install Splunk Universal Forwarder
+  yum:
+    name: /tmp/splunkUF.rpm
+    state: installed
+  when: splunkUFInstalled is failed
+
+- name: Configure Splunk user-seed.conf file
+  ini_file:
+    path: /opt/splunkforwarder/etc/system/default/user-seed.conf
+    owner: splunk
+    mode: 0700
+    section: user_info
+    option: USERNAME
+    value: admin
+  when: splunkUFInstalled is failed
+
+- name: Configure Splunk user-seed.conf file round 2
+  ini_file:
+    path: /opt/splunkforwarder/etc/system/default/user-seed.conf
+    owner: splunk
+    mode: 0700
+    section: user_info
+    option: PASSWORD
+    value: "{{ splunkUFAdminPassword }}"
+  when: splunkUFInstalled is failed
+
+- name: Set Permissions on /opt/splunkforwarder
+  file:
+    name: /opt/splunkforwarder
+    recurse: yes
+    owner: splunk
+    group: splunk
+  when: splunkUFInstalled is failed
+
+- name: Start Splunk For First Time
+  become_user: splunk
+  command: /opt/splunkforwarder/bin/splunk start --accept-license
+  when: splunkUFInstalled is failed
+
+- name: Stop Splunk
+  become_user: splunk
+  command: /opt/splunkforwarder/bin/splunk stop
+  when: splunkUFInstalled is failed
+
+- name: Enable Splunk to Start on Boot
+  command: /opt/splunkforwarder/bin/splunk enable boot-start -systemd-managed 1 -user splunk
+  when: splunkUFInstalled is failed
+
+- name: Verify Splunk user-seed.conf File is Removed
+  file:
+    path: /opt/splunkforwarder/etc/system/default/user-seed.conf
+    state: absent

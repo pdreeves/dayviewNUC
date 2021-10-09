@@ -1,0 +1,9 @@
+[Unit]
+Description=Fix permissions on /var/log directories
+
+[Service]
+Type=simple
+ExecStart=/bin/sh -c "setfacl -R -m user:splunk:rx /var/log/"
+
+[Install]
+WantedBy=multi-user.target

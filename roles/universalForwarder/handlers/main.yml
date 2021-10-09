@@ -1,0 +1,6 @@
+---
+
+- name: Restart splunkforwarder
+  systemd:
+    name: SplunkForwarder
+    state: restarted

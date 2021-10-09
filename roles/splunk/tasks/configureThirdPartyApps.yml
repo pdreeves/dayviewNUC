@@ -70,4 +70,4 @@
     - "{{ appsDeploying['files'] }}"
 
 - name: Remove all apps from server
-  shell: rm -rf /opt/splunk/etc/apps/*
+  shell: rm -rf /opt/splunk/apps/*

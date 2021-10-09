@@ -43,6 +43,7 @@
     published_ports:
       - 9997:9997
       - 8000:8000
+      - 8088:8088
     labels:
       traefik.http.routers.splunk.tls: "true"
       traefik.http.services.splunk.loadbalancer.server.port: "8000"
@@ -89,7 +90,7 @@
     log_driver: splunk
     log_options:
       splunk-token: "{{ splunkContainerHECToken }}"
-      splunk-url: https://splunk.greentangent.net:8088
+      splunk-url: "https://{{ splunkHECDestination }}:8088"
       splunk-insecureskipverify: true
       splunk-index: containers
       splunk-source: splunk

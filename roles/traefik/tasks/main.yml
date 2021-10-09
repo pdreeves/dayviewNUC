@@ -44,7 +44,7 @@
     log_driver: splunk
     log_options:
       splunk-token: "{{ splunkContainerHECToken }}"
-      splunk-url: https://splunk.greentangent.net:8088
+      splunk-url: "https://{{ splunkHECDestination }}:8088"
       splunk-insecureskipverify: true
       splunk-index: containers
       splunk-source: traefik

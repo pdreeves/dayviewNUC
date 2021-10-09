@@ -15,3 +15,4 @@ splunkConfFiles: ['indexes.conf', 'inputs.conf', 'limits.conf', 'props.conf', 'r
 remoteStorageVolumePath: minio-splunk
 remoteStorageVolumeEndpoint: minio.dayview.greentangent.net
 remoteStorageVolume: minio-splunk
+splunkHECDestination: splunk.dayview.greentangent.net

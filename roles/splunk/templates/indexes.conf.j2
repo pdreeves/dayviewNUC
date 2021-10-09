@@ -25,7 +25,6 @@ homePath = /opt/splunk/var/lib/splunk/defaultdb/db
 coldPath = /opt/splunk/var/lib/splunk/defaultdb/colddb
 thawedPath = /opt/splunk/var/lib/splunk/defaultdb/thaweddb
 frozenTimePeriodInSecs = 604800
-maxTotalDataSizeMB = 5000
 maxHotSpanSecs = 86400
 maxTotalDataSizeMB = 100000000
 remotePath = volume:{{ remoteStorageVolume }}/main
@@ -34,7 +33,7 @@ remotePath = volume:{{ remoteStorageVolume }}/main
 homePath = /opt/splunk/var/lib/splunk/_internaldb/db
 coldPath = /opt/splunk/var/lib/splunk/_internaldb/colddb
 thawedPath = /opt/splunk/var/lib/splunk/_internaldb/thaweddb
-frozenTimePeriodInSecs = 189302400
+frozenTimePeriodInSecs = 31540000
 remotePath = volume:{{ remoteStorageVolume }}/_internal
 maxHotSpanSecs = 86400
 maxTotalDataSizeMB = 100000000
@@ -43,7 +42,7 @@ maxTotalDataSizeMB = 100000000
 homePath = /opt/splunk/var/lib/splunk/audit/db
 coldPath = /opt/splunk/var/lib/splunk/audit/colddb
 thawedPath = /opt/splunk/var/lib/splunk/audit/thaweddb
-frozenTimePeriodInSecs = 189302400
+frozenTimePeriodInSecs = 31540000
 remotePath = volume:{{ remoteStorageVolume }}/_audit
 maxHotSpanSecs = 86400
 maxTotalDataSizeMB = 100000000
@@ -52,36 +51,44 @@ maxTotalDataSizeMB = 100000000
 homePath = /opt/splunk/var/lib/splunk/_introspection/db
 coldPath = /opt/splunk/var/lib/splunk/_introspection/colddb
 thawedPath = /opt/splunk/var/lib/splunk/_introspection/thaweddb
-frozenTimePeriodInSecs = 189302400
+frozenTimePeriodInSecs = 31540000
 remotePath = volume:{{ remoteStorageVolume }}/_introspection
 maxHotSpanSecs = 86400
 maxTotalDataSizeMB = 100000000
 
 # Custom indexes for home lab
 [app]
+tsidxStatsHomePath =  /opt/splunk/var/lib/splunk/app/tsidxStats
 remotePath = volume:{{ remoteStorageVolume }}/app
 
 [app-metrics]
+tsidxStatsHomePath =  /opt/splunk/var/var/lib/splunk/metrics/tsidxStats
 remotePath = volume:{{ remoteStorageVolume }}/app-metrics
 datatype = metric
 metric.timestampResolution = s
 
 [netflow]
+tsidxStatsHomePath =  /opt/splunk/var/lib/splunk/netflow/tsidxStats
 remotePath = volume:{{ remoteStorageVolume }}/netflow
 
 [network]
+tsidxStatsHomePath =  /opt/splunk/var/lib/splunk/network/tsidxStats
 remotePath = volume:{{ remoteStorageVolume }}/network
 
 [os]
+tsidxStatsHomePath =  /opt/splunk/var/lib/splunk/os/tsidxStats
 remotePath = volume:{{ remoteStorageVolume }}/os
 
 [containers]
+tsidxStatsHomePath =  /opt/splunk/var/lib/splunk/containers/tsidxStats
 remotePath = volume:{{ remoteStorageVolume }}/containers
 
 [application]
+tsidxStatsHomePath =  /opt/splunk/var/lib/splunk/application/tsidxStats
 remotePath = volume:{{ remoteStorageVolume }}/application
 
 [home]
+tsidxStatsHomePath =  /opt/splunk/var/lib/splunk/home/tsidxStats
 remotePath = volume:{{ remoteStorageVolume }}/home
 
 

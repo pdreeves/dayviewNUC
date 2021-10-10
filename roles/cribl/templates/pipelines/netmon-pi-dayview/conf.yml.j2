@@ -1,0 +1,48 @@
+output: default
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: drop
+    filter: "! ( _raw.match('\\s\\d\\.\\|\\-\\-') || _raw.match(\"speedtest\"))"
+    disabled: false
+    conf: {}
+  - id: regex_extract
+    filter: " _raw.match('\\s\\d\\.\\|\\-\\-')"
+    disabled: false
+    conf:
+      source: _raw
+      iterations: 100
+      overwrite: false
+      regex: /(\d.\|\-\-\s)(?<mtrTarget>[0-9.]+)\s+(?<mtrLoss>[0-9.%]+)\s+\d\s+([0-9.]+)\s+(?<mtrAvg>[0-9.]+)\s+(?<mtrBest>[0-9.]+)\s+(?<mtrWorst>[0-9.]+)\s+(?<mtrStdev>[0-9.]+)/
+  - id: serialize
+    filter: " _raw.match('\\s\\d\\.\\|\\-\\-')"
+    disabled: null
+    conf:
+      type: kvp
+      fields:
+        - mtr*
+      dstField: _raw
+      cleanFields: false
+  - id: eval
+    filter: " _raw.match('mtrAvg')"
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'netmon-pi-mtr'"
+        - name: index
+          value: "'network'"
+      remove:
+        - mtr*
+    final: true
+  - id: eval
+    filter: _raw.match("speedtest")
+    disabled: null
+    conf:
+      add:
+        - name: _raw
+          value: _raw.replace(/\\/g, '')
+        - name: index
+          value: "'network'"
+        - name: sourcetype
+          value: "'netmon-pi-speedtest'"

@@ -11,6 +11,7 @@
     - docker
     - portainer
     - traefik
+    - cribl
     - minio
     - splunk
     - universalForwarder

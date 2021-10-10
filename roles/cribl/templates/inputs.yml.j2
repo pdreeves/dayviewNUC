@@ -1,0 +1,35 @@
+inputs:
+  CriblLogs:
+    disabled: false
+    type: cribl
+    metadata:
+      - name: index
+        value: '"scrap"'
+  CriblMetrics:
+    disabled: false
+    prefix: cribl.logstream.
+    type: criblmetrics
+    pipeline: cribl_metrics_rollup
+    metadata:
+      - name: index
+        value: '"scrap-metrics"'
+  syslog-1514:
+    disabled: false
+    host: 0.0.0.0
+    maxBufferSize: 1000
+    ipWhitelistRegex: /.*/
+    timestampTimezone: local
+    singleMsgUdpPackets: false
+    enableProxyHeader: false
+    keepFieldsList: []
+    tls:
+      disabled: true
+    type: syslog
+    udpPort: 1514
+    tcpPort: 1514
+    pipeline: pre-process-syslog
+    metadata:
+      - name: _time
+        value: C.vars.unixtime()
+      - name: source
+        value: __srcIpPort.split('|')[1]

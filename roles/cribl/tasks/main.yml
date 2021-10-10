@@ -52,6 +52,14 @@
     dest: "/opt/cribl/data/"
   notify: Restart Cribl in container
 
+- name: Copy cert files
+  copy:
+    src: roles/cribl/files/certs/{{ item }}
+    dest: /opt/cribl/local/cribl/auth/certs/{{item}}
+  with_items:
+    - cert.pem
+    - privkey.pem
+
 - name: Start Cribl
   docker_container:
     detach: true
@@ -66,6 +74,8 @@
       - 1514:1514/udp
       - 1514:1514
       - 9003:9000
+      - 9997:9997
+      - 8088:8088
     labels:
       traefik.http.routers.cribl.tls: "true"
       traefik.http.services.cribl.loadbalancer.server.port: "9000"

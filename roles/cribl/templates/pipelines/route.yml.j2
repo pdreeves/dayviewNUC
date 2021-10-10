@@ -19,6 +19,24 @@ routes:
     clones: []
     filter: __inputId.startsWith('syslog:syslog-1514')
     output: splunkDayview
+  - id: laGSG2
+    name: Container passthru
+    final: true
+    disabled: false
+    pipeline: passthru
+    description: ""
+    clones: []
+    filter: __inputId=='splunk_hec:splunkHEC' && index=='containers'
+    output: splunkDayview
+  - id: laGSG2
+    name: UF passthru
+    final: true
+    disabled: false
+    pipeline: passthru
+    description: ""
+    clones: []
+    filter: __inputId=='splunk:splunkTCP'
+    output: splunkDayview
   - id: default
     name: default
     final: true

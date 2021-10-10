@@ -41,9 +41,8 @@
     restart_policy: unless-stopped
     interactive: true
     published_ports:
-      - 9997:9997
+      - 9998:9997
       - 8000:8000
-      - 8088:8088
     labels:
       traefik.http.routers.splunk.tls: "true"
       traefik.http.services.splunk.loadbalancer.server.port: "8000"
@@ -81,9 +80,8 @@
     restart_policy: unless-stopped
     interactive: true
     published_ports:
-      - 9997:9997
+      - 9998:9997
       - 8000:8000
-      - 8088:8088
     labels:
       traefik.http.routers.splunk.tls: "true"
       traefik.http.services.splunk.loadbalancer.server.port: "8000"

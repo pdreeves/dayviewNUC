@@ -26,20 +26,21 @@ functions:
           value: message
       remove:
         - message
+        - srcIpPort
     description: Clean up message and _raw, and remove srcIpPort
     groupId: UysTSj
   - id: lookup
     filter: "true"
     disabled: null
     conf:
-      matchMode: exact
+      matchMode: cidr
+      matchType: specific
       reloadPeriodSec: 60
       addToEvent: false
       inFields:
         - eventField: source
           lookupField: sourceCIDRRange
       ignoreCase: false
-      matchType: specific
       file: pre-process-syslog.csv
       outFields:
         - lookupField: sourcetype
@@ -49,6 +50,7 @@ functions:
         - lookupField: host
           eventField: host
     final: true
+
   - id: eval
     filter: "!index && !sourcetype"
     disabled: null

@@ -1,2 +1,5 @@
-"sourceCIDRRange","index","sourcetype"
-"10.0.0.1/32","os","123"
+"sourceCIDRRange","index","sourcetype","host"
+"192.168.71.201/32","os","syslog","synology.dayview.greentangent.net"
+"192.168.71.1/32","network","pfsense","pfsense.dayview.greentangent.net"
+"172.17.0.1/32","network","pfsense","pfsense.dayview.greentangent.net"
+"192.168.71.1/32","network","syslog","officeswitch.dayview.greentangent.net"

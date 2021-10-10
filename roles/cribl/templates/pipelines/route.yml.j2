@@ -1,0 +1,30 @@
+id: default
+groups: {}
+routes:
+  - id: gfh64U
+    name: cribl-internal
+    final: true
+    disabled: false
+    pipeline: passthru
+    description: ""
+    clones: []
+    filter: __inputId=='cribl:CriblLogs' || __inputId=='cribl:CriblMetrics'
+    output: splunkDayview
+  - id: laGSG1
+    name: syslogPassthrough
+    final: true
+    disabled: false
+    pipeline: passthru
+    description: ""
+    clones: []
+    filter: __inputId.startsWith('syslog:syslog-1514')
+    output: splunkDayview
+  - id: default
+    name: default
+    final: true
+    disabled: false
+    pipeline: main
+    description: ""
+    clones: []
+    filter: "true"
+    output: default

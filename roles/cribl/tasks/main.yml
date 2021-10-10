@@ -42,6 +42,7 @@
   template:
     src: "roles/cribl/templates/{{ item['path'][22:] }}"
     dest: "/opt/cribl/local/cribl/{{ item['path'][22:-3] }}"
+  notify: Restart Cribl in container
   with_items:
     - "{{ criblWorkerTemplateFiles['files'] }}"
 

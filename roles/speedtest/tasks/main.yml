@@ -1,0 +1,27 @@
+---
+
+- name: Manage speedtest image
+  docker_image:
+    state: present
+    name: adolfintel/speedtest
+    force_source: yes
+    source: pull
+
+- name: Create Speedtest Container
+  docker_container:
+    detach: true
+    name: speedtest
+    image: adolfintel/speedtest
+    state: started
+    restart_policy: unless-stopped
+    labels:
+      traefik.http.routers.speedtest.tls: "true"
+    log_driver: splunk
+    log_options:
+      splunk-token: "{{splunkContainerHECToken}}"
+      splunk-url: https://{{ splunkHECDestination }}:8088
+      splunk-insecureskipverify: true
+      splunk-index: containers
+      splunk-source: speedtest
+      splunk-sourcetype: syslog
+      splunk-verify-connection: false

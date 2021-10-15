@@ -18,3 +18,4 @@ providers:
     filename: /opt/external/tlsTraefik.yml
   providersThrottleDuration: 10s
 
+accessLog: {}

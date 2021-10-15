@@ -67,6 +67,10 @@ remotePath = volume:{{ remoteStorageVolume }}/app-metrics
 datatype = metric
 metric.timestampResolution = s
 
+[dns]
+tsidxStatsHomePath =  /opt/splunk/var/lib/splunk/dns/tsidxStats
+remotePath = volume:{{ remoteStorageVolume }}/dns
+
 [netflow]
 tsidxStatsHomePath =  /opt/splunk/var/lib/splunk/netflow/tsidxStats
 remotePath = volume:{{ remoteStorageVolume }}/netflow

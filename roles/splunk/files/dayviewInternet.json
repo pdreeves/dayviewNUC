@@ -1,0 +1,288 @@
+{
+	"visualizations": {
+		"viz_U90E2DFe": {
+			"type": "viz.singlevalueradial",
+			"title": "Latest Latency Average",
+			"dataSources": {
+				"primary": "ds_nCJ8uBUp"
+			},
+			"encoding": {
+				"fill": {
+					"field": "primary[0]",
+					"format": {
+						"type": "rangevalue",
+						"ranges": [
+							{
+								"from": 120,
+								"value": "#cb3b43"
+							},
+							{
+								"from": 90,
+								"value": "#dc4e41",
+								"to": 120
+							},
+							{
+								"from": 70,
+								"value": "#f8be44",
+								"to": 90
+							},
+							{
+								"from": 50,
+								"value": "#b6c75a",
+								"to": 70
+							},
+							{
+								"from": 30,
+								"value": "#53a051",
+								"to": 50
+							},
+							{
+								"to": 30,
+								"value": "#5fbcff"
+							}
+						]
+					}
+				}
+			}
+		},
+		"viz_brCYUSu0": {
+			"type": "viz.line",
+			"title": "Latency Average Over Time",
+			"options": {
+				"chart.nullValueMode": "connect"
+			},
+			"dataSources": {
+				"primary": "ds_cEXvDuCN"
+			}
+		},
+		"viz_lwZU1Gkd": {
+			"type": "viz.singlevalueradial",
+			"title": "Latest Download Speed",
+			"dataSources": {
+				"primary": "ds_iS2SOpny"
+			},
+			"encoding": {
+				"fill": {
+					"field": "primary[0]",
+					"format": {
+						"type": "rangevalue",
+						"ranges": [
+							{
+								"from": 90,
+								"value": "#53a051"
+							},
+							{
+								"value": "#dc4e41",
+								"to": 90
+							}
+						]
+					}
+				}
+			}
+		},
+		"viz_nEN8b26C": {
+			"type": "viz.singlevalueradial",
+			"title": "Latest Upload Speed",
+			"dataSources": {
+				"primary": "ds_QyaHXJ66"
+			},
+			"encoding": {
+				"fill": {
+					"field": "primary[0]",
+					"format": {
+						"type": "rangevalue",
+						"ranges": [
+							{
+								"from": 40,
+								"value": "#53a051"
+							},
+							{
+								"value": "#dc4e41",
+								"to": 40
+							}
+						]
+					}
+				}
+			}
+		},
+		"viz_qVeKblkt": {
+			"type": "viz.line",
+			"title": "Throughput Over Time",
+			"options": {
+				"chart.nullValueMode": "connect"
+			},
+			"dataSources": {
+				"primary": "ds_CeGSHOQ8"
+			}
+		}
+	},
+	"dataSources": {
+		"ds_RcJFjz3f": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=network source=\"netmon-pi-dayview\" mtrTarget=8.8.8.8 OR mtrTarget=208.67.222.222 OR mtrTarget=13.33.25.126"
+			},
+			"name": "baseLatency"
+		},
+		"ds_nCJ8uBUp": {
+			"type": "ds.chain",
+			"options": {
+				"query": "|  search mtrTarget=$dd_ICRMfoZl$\n| stats latest(mtrAvg)",
+				"extend": "ds_RcJFjz3f"
+			},
+			"name": "mtrAvgLatest"
+		},
+		"ds_cEXvDuCN": {
+			"type": "ds.chain",
+			"options": {
+				"query": "|  search mtrTarget=$dd_ICRMfoZl$\n| timechart avg(mtrAvg) by mtrTarget",
+				"extend": "ds_RcJFjz3f"
+			},
+			"name": "mtrAvgTimechart"
+		},
+		"ds_jvAcHNkh": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=network source=\"netmon-pi-dayview\" sourcetype=\"netmon-pi-speedtest\""
+			},
+			"name": "baseSpeedtest"
+		},
+		"ds_UDcUEjCZ": {
+			"type": "ds.search",
+			"options": {
+				"query": "index=network host=dayviewPi source=\"netmon-pi-dayview\" sourcetype=\"netmon-pi-speedtest\"\n| spath input=line"
+			},
+			"name": "baseThroughput"
+		},
+		"ds_iS2SOpny": {
+			"type": "ds.chain",
+			"options": {
+				"extend": "ds_UDcUEjCZ",
+				"query": "| stats latest(download.bandwidth) as download\n| eval download = 8 * download/1000/1000"
+			},
+			"name": "latestDownload"
+		},
+		"ds_QyaHXJ66": {
+			"type": "ds.chain",
+			"options": {
+				"query": "| stats latest(upload.bandwidth) as upload\n| eval upload = 8 * upload/1000/1000",
+				"extend": "ds_UDcUEjCZ"
+			},
+			"name": "latestUpload"
+		},
+		"ds_CeGSHOQ8": {
+			"type": "ds.chain",
+			"options": {
+				"query": "| timechart values(upload.bandwidth) as upload, values(download.bandwidth) as download\n| eval upload = 8 * upload/1000/1000, download = 8 * download/1000/1000",
+				"extend": "ds_UDcUEjCZ"
+			},
+			"name": "timechartThroughput"
+		}
+	},
+	"defaults": {
+		"dataSources": {
+			"ds.search": {
+				"options": {
+					"queryParameters": {
+						"latest": "$global_time.latest$",
+						"earliest": "$global_time.earliest$"
+					}
+				}
+			}
+		}
+	},
+	"inputs": {
+		"input_global_trp": {
+			"type": "input.timerange",
+			"options": {
+				"token": "global_time",
+				"defaultValue": "-24h@h,now"
+			},
+			"title": "Global Time Range"
+		},
+		"input_DDmIPNTx": {
+			"options": {
+				"items": [
+					{
+						"label": "All",
+						"value": "*"
+					},
+					{
+						"label": "Google DNS",
+						"value": "8.8.8.8"
+					},
+					{
+						"label": "Open DNS",
+						"value": "208.67.222.222"
+					}
+				],
+				"defaultValue": "*",
+				"token": "dd_ICRMfoZl"
+			},
+			"title": "Dropdown Input Title",
+			"type": "input.dropdown"
+		}
+	},
+	"layout": {
+		"type": "grid",
+		"options": {},
+		"structure": [
+			{
+				"item": "viz_U90E2DFe",
+				"type": "block",
+				"position": {
+					"x": 0,
+					"y": 0,
+					"w": 1200,
+					"h": 400
+				}
+			},
+			{
+				"item": "viz_brCYUSu0",
+				"type": "block",
+				"position": {
+					"x": 0,
+					"y": 400,
+					"w": 1200,
+					"h": 400
+				}
+			},
+			{
+				"item": "viz_nEN8b26C",
+				"type": "block",
+				"position": {
+					"x": 600,
+					"y": 800,
+					"w": 600,
+					"h": 400
+				}
+			},
+			{
+				"item": "viz_lwZU1Gkd",
+				"type": "block",
+				"position": {
+					"x": 0,
+					"y": 800,
+					"w": 600,
+					"h": 400
+				}
+			},
+			{
+				"item": "viz_qVeKblkt",
+				"type": "block",
+				"position": {
+					"x": 0,
+					"y": 1200,
+					"w": 1200,
+					"h": 400
+				}
+			}
+		],
+		"globalInputs": [
+			"input_global_trp",
+			"input_DDmIPNTx"
+		]
+	},
+	"description": "",
+	"title": "Dayview Internet"
+}

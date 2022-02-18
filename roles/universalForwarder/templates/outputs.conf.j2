@@ -2,5 +2,10 @@
 index = false
 
 [tcpout:group1]
-server = splunk.dayview.greentangent.net:9997
+server = {{ splunkUFDestination }}
 useACK = true
+useSSL = true
+token = {{ splunkUFAuthToken }}
+sslVerifyServerCert = false
+clientCert = $SPLUNK_HOME/etc/auth/server.pem
+sslPassword = password

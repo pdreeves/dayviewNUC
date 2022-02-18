@@ -17,6 +17,7 @@
   yum:
     name: /tmp/splunkUF.rpm
     state: installed
+    disable_gpg_check: true
   when: splunkUFInstalled is failed
 
 - name: Configure Splunk user-seed.conf file

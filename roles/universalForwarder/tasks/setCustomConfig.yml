@@ -20,3 +20,4 @@
   with_items:
     - inputs.conf
     - outputs.conf
+    - server.conf

@@ -20,8 +20,8 @@
       traefik.http.routers.portainer.tls: "true"
     log_driver: splunk
     log_options:
-      splunk-token: "{{ splunkContainerHECToken }}"
-      splunk-url: "https://{{ splunkHECDestination }}:8088"
+      splunk-token: "{{ containerHECToken }}"
+      splunk-url: "{{ containerHECDestination }}"
       splunk-insecureskipverify: true
       splunk-index: containers
       splunk-source: portainer

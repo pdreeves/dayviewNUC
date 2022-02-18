@@ -7,12 +7,8 @@
 
   roles:
     - baseConfig
-    - formatDisk
     - docker
     - portainer
     - traefik
-    - cribl
-    - minio
-    - splunk
+    - speedtest    
     - universalForwarder
-    - speedtest

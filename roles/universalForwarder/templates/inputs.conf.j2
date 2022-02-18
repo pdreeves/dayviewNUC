@@ -1,3 +1,4 @@
+# Local inputs
 [script:///opt/splunkforwarder/etc/apps/Splunk_TA_nix/bin/vmstat_metric.sh]
 disabled = 0
 index = os
@@ -162,3 +163,17 @@ index = os
 [script:///opt/splunkforwarder/etc/apps/Splunk_TA_nix/bin/vsftpdChecker.sh]
 disabled = 0
 index = os
+
+# Network inputs
+[udp://192.168.71.1:1514]
+sourcetype = pfsense
+host = pfsense.dayview.greentangent.net
+source = 192.168.71.1
+index = network
+
+[udp://192.168.71.2:1515]
+sourcetype = syslog
+host = officeswitch.dayview.greentangent.net
+source = 192.168.71.2
+index = network
+

@@ -1,4 +1,0 @@
----
-
-- name: Restart Cribl in container
-  shell: docker container restar cribl

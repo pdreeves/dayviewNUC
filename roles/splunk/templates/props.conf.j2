@@ -1,9 +1,0 @@
-[netmon]
-EXTRACT-latency = time\=(?P<latency>[^:]+)ms
-EXTRACT-hostname = from\s(?P<destination>[^:]+)
-EXTRACT-downloadSpeed = Download:\s*(?P<downloadSpeed>[^:]+)\sMbps
-EXTRACT-uploadSpeed = Upload:\s*(?P<uploadSpeed>[^:]+)\sMbps
-EXTRACT-packetLoss = received,\s(?P<packetLoss>[^:]+)%\spacket\sloss
-
-[_json]
-TRUNCATE=500000

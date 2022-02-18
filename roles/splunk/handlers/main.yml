@@ -1,4 +1,0 @@
----
-
-- name: Restart Splunk in container
-  shell: docker container exec splunk /opt/splunk/bin/splunk restart

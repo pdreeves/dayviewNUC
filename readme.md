@@ -12,3 +12,8 @@
 - Enter shell: `docker container exec --tty --interactive splunk /bin/bash`
 - Run container: `docker run --rm -it netmon /bin/bash`
 - Build image: `docker image build . --file Dockerfile --tag netmon`
+
+## Rebuild steps
+- Install OS
+- Intall python3 `yum install python3 -y`
+- Run the Ansible code

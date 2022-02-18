@@ -1,8 +1,8 @@
 # Readme.md
 
 ## NUC Management
-- Command to run playbooks against entire environment for the first time: `ansible-playbook -i inventory.yml site.yml --ask-pass --ask-vault-pass`
-- Additional runs: `ansible-playbook -i inventory.yml site.yml --extra-vars '{"updateKernel":"true", "ansible_ssh_private_key_file":"~/.ssh/nuc.greentangent.net"}' --ask-vault-pass`
+- Command to run playbooks against entire environment for the first time: `ansible-playbook -i inventory.yml site.yml --ask-pass --vault-password-file secretPassword`
+- Additional runs: `ansible-playbook -i inventory.yml site.yml --extra-vars '{"updateKernel":"true", "ansible_ssh_private_key_file":"~/.ssh/nuc.dayview.greentangent.net"}' --vault-password-file secretPassword`
 
 ## Vault stuff
 - Edit vault: `ansible-vault edit group_vars/all/secrets.yml`

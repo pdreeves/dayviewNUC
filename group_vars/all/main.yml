@@ -1,12 +1,9 @@
 ---
 
 # baseConfig
-sshKeys: ['nuc.greentangent.net.pub']
+sshKeys: ['nuc.dayview.greentangent.net.pub']
 sshKeypath: /root/.ssh/
 setSSHKeyLogin: true
-
-# formatDisk
-overWritePartition: false
 
 # splunk
 rebuildSplunkImage: false

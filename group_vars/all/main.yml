@@ -13,3 +13,6 @@ remoteStorageVolumePath: minio-splunk
 remoteStorageVolumeEndpoint: minio.dayview.greentangent.net
 remoteStorageVolume: minio-splunk
 splunkHECDestination: splunk.dayview.greentangent.net
+
+# Pihole
+piholeName: pihole.dayview.greentangent.net

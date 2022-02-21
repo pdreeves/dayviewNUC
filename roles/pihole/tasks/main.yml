@@ -1,0 +1,77 @@
+---
+
+- name: Create pihole directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - /opt/pihole
+    - /opt/pihole/pihole/
+    - /opt/pihole/dnsmasq.d/
+    - /opt/pihole/log/
+
+- name: Manage pihole image
+  docker_image:
+    state: present
+    name: pihole/pihole
+    force_source: yes
+    source: pull
+
+- name: Create pihole Container
+  docker_container:
+    detach: true
+    name: pihole
+    image: pihole/pihole
+    state: started
+    restart_policy: unless-stopped
+    labels:
+      traefik.http.routers.pihole.tls: "true"
+      traefik.http.services.pihole.loadbalancer.server.port: "80"
+    published_ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "85:80/tcp"
+    log_driver: splunk
+    log_options:
+      splunk-token: "{{ containerHECToken }}"
+      splunk-url: "{{ containerHECDestination }}"
+      splunk-insecureskipverify: true
+      splunk-index: containers
+      splunk-source: pihole-dayview
+      splunk-sourcetype: syslog
+      splunk-verify-connection: false
+    env:
+        WEBPASSWORD: "{{ piholeAdminPassword }}"
+        TZ: "ETC/UTC"
+        ServerIP: "{{ ansible_host }}"
+        PIHOLE_DNS_: "208.67.222.222;208.67.220.220"
+        VIRTUAL_HOST: "{{ piholeName }}"
+    volumes:
+      - /opt/pihole/pihole/:/etc/pihole/:Z
+      - /opt/pihole/dnsmasq.d/:/etc/dnsmasq.d/:Z
+      - /opt/pihole/log/pihole.log:/var/log/pihole.log:z
+
+- name: Create Splunk pihole App Folder
+  file:
+    path: /opt/splunkforwarder/etc/apps/greentangent-pihole/local/
+    owner: splunk
+    group: splunk
+    mode: 0744
+    state: directory
+  notify: Restart splunkforwarder
+
+- name: Copy custom app files to host
+  template:
+    src: "{{ item }}.j2"
+    dest: "/opt/splunkforwarder/etc/apps/greentangent-pihole/local/{{item}}"
+    mode: 0644
+    owner: splunk
+    group: splunk
+  notify: Restart splunkforwarder
+  register: confFilesChanged
+  with_items:
+    - inputs.conf

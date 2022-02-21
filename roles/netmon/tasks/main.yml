@@ -1,0 +1,42 @@
+---
+
+- name: Create netmon container directory
+  file:
+    path: /opt/netmon/
+    state: directory
+
+- name: Copy files required for netmon container
+  copy:
+    src: "{{item}}"
+    dest: "/opt/netmon/{{item}}"
+    mode: 0644
+  with_items:
+    - "entrypoint.sh"
+    - "Dockerfile"
+
+- name: Build netmon docker image
+  docker_image:
+    build:
+      path: /opt/netmon/
+      rm: false
+    name: netmon
+    source: build
+    force_source: true
+
+- name: Start netmon Container
+  docker_container:
+    detach: true
+    name: netmon
+    image: netmon
+    state: started
+    restart_policy: unless-stopped
+    interactive: true
+    log_driver: splunk
+    log_options:
+      splunk-token: "{{ containerHECToken }}"
+      splunk-url: "{{ containerHECDestination }}"
+      splunk-insecureskipverify: true
+      splunk-index: network
+      splunk-source: netmon-dayview
+      splunk-sourcetype: netmon
+      splunk-verify-connection: false

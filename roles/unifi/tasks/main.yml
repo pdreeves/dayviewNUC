@@ -1,0 +1,57 @@
+---
+
+- name: Fix Unifi Data Directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - /opt/unifi-controller
+
+- name: Manage Unifi Image
+  docker_image:
+    state: present
+    name: linuxserver/unifi-controller
+    force_source: yes
+    source: pull
+
+- name: Create Unifi Container
+  docker_container:
+    detach: true
+    name: unifi-controller
+    image: linuxserver/unifi-controller
+    env:
+        PUID: "1000"
+        PGID: "1000"
+        MEM_LIMIT: "1024M"
+        MEM_STARTUP: "1024M"
+    labels:
+      traefik.http.routers.unifi-controller.tls: "true"
+      traefik.http.services.unifi-controller.loadbalancer.server.scheme: "https"
+      traefik.http.services.unifi-controller.loadbalancer.server.port: "8443"
+    log_driver: splunk
+    log_options:
+      splunk-token: "{{ containerHECToken }}"
+      splunk-url: "{{ containerHECDestination }}"
+      splunk-insecureskipverify: true
+      splunk-index: containers
+      splunk-source: unifi-controller
+      splunk-sourcetype: syslog
+      splunk-verify-connection: false
+    state: started
+    restart_policy: unless-stopped
+    privileged: true
+    published_ports:
+      - 3478:3478/udp
+      - 10001:10001/udp
+      - 8080:8080 
+      - 8443:8443 
+      - 1900:1900/udp
+      - 8843:8843 
+      - 8880:8880 
+      - 6789:6789 
+      - 5514:5514/udp
+    volumes:
+      - /opt/unifi-controller:/config:Z

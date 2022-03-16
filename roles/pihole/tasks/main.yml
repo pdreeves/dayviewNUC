@@ -75,3 +75,4 @@
   register: confFilesChanged
   with_items:
     - inputs.conf
+    - props.conf

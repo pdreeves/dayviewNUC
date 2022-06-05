@@ -6,13 +6,13 @@
   gather_facts: false
 
   roles:
-    # - baseConfig
-    # - tailscale
-    # - logrotate
-    # - docker
-    # - traefik
-    # - netmon
-    # - speedtest
-    # - pihole
-    # - universalForwarderIntel
+    - baseConfig
+    - tailscale
+    - logrotate
+    - docker
+    - traefik
+    - netmon
+    - speedtest
+    - pihole
+    - universalForwarderIntel
     - unifi

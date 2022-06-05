@@ -1,7 +1,6 @@
 ---
 
 - name: Remove Packages
-  yum:
-    name: "{{ query('flattened', ['{{ packagesToRemove }}']) }}"
+  apt:
+    name: "{{ query('flattened', ['{{packagesToRemove}}']) }}"
     state: absent
-    lock_timeout: 600

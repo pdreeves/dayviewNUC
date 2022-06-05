@@ -1,5 +1,36 @@
 ---
 
+- name: Run AIDE Initialization
+  command: "aide --init"
+  notify: Create New AIDE Database
+
+- name: Create New AIDE Database
+  command: "cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz"
+
+- name: Run AIDE Check
+  command: "aide --check"
+  ignore_errors: true
+
+- name: Restart fail2ban
+  service:
+    name: fail2ban
+    state: restarted
+
+- name: Restart ssh
+  service:
+    name: sshd
+    state: restarted
+
+- name: Update rkhunter
+  command: "rkhunter --update"
+  ignore_errors: yes
+  listen: Update and Run rkhunter
+
+- name: Run rkhunter
+  command: "rkhunter --cronjob --report-warnings-only"
+  ignore_errors: yes
+  listen: Update and Run rkhunter
+
 - name: Restart Machine
   command: /sbin/shutdown -r +1
   async: 0
@@ -15,11 +46,3 @@
     timeout=600
   delegate_to: localhost
   become: false
-
-- name: Apply new SELinux Cron Type
-  command: "restorecon -irvF /var/spool/cron"
-
-- name: Restart ssh
-  service:
-    name: sshd
-    state: restarted

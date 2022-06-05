@@ -310,7 +310,3 @@ DATAONLY =  p+n+u+g+s+acl+selinux+xattrs+sha256
 
 # Ditto /var/log/sa/ same reason...
 !/var/log/httpd/
-
-#Splunks var is also quite volitile due to bucket updates
-#this covers /var/lib, /var/run/ and /var/log
-!/opt/splunk/var/

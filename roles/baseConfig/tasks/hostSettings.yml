@@ -1,5 +1,12 @@
 ---
 
+- name: Set Permissions on sysctl.conf
+  file:
+    path: "/etc/sysctl.conf"
+    owner: "root"
+    group: "root"
+    mode: "0444"
+
 - name: Set sysctl Settings
   copy:
     src: 50-sysctl.conf
@@ -8,11 +15,7 @@
     group: root
     mode: 0444
 
-- name: Enable SELinux as Enforcing
-  selinux:
-    policy: targeted
-    state: enforcing
-
-- name: Set hostname
-  hostname: 
-    name: "{{ shortHostName }}"
+- name: Set HostName
+  hostname:
+    name: "{{hostname}}"
+    use: debian

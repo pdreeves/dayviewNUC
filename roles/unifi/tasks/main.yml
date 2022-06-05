@@ -54,4 +54,4 @@
       - 6789:6789 
       - 5514:5514/udp
     volumes:
-      - /opt/unifi-controller:/config:Z
+      - /opt/unifi-controller:/config

@@ -12,20 +12,20 @@
 - name: Find all apps to install
   delegate_to: localhost
   find:
-    paths: roles/universalForwarder/files/apps/
+    paths: roles/universalForwarderArm/files/apps/
     patterns: '*.tgz'
   notify: Restart splunkforwarder
   register: ufAppsToDeploy
 
 - name: Copy app to deploy to server
   copy:
-    dest: "/opt/splunkforwarder/customApps/{{ item['path'][36:] }}"
+    dest: "/opt/splunkforwarder/customApps/{{ item['path'][39:] }}"
     src: "{{ item['path']  }}"
   with_items: 
     - "{{ ufAppsToDeploy['files'] }}"
 
 - name: Uncompress ufAppsToDeploy
-  shell: "tar zxf /opt/splunkforwarder/customApps/{{ item['path'][36:] }} -C /opt/splunkforwarder/customApps/"
+  shell: "tar zxf /opt/splunkforwarder/customApps/{{ item['path'][39:] }} -C /opt/splunkforwarder/customApps/"
   with_items: "{{ ufAppsToDeploy['files'] }}"
 
 - name: Find all apps to remove files from

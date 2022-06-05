@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -17,7 +17,7 @@ case "$1" in
    			i=$[$i+1]
    			sleep 240
 		 done 
-		speedtest --server-id=1768 -f json -p no -u Mbps
+		speedtest --json
 	done;;
   bash)
   /bin/bash

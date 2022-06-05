@@ -1,10 +1,11 @@
 # Readme.md
 
 ## NUC Management
-- Command to run playbooks against entire environment for the first time: `ansible-playbook -i inventory.yml site.yml --ask-pass --vault-password-file secretPassword`
-- Additional runs: `ansible-playbook -i inventory.yml site.yml --extra-vars '{"updateKernel":"true", "ansible_ssh_private_key_file":"~/.ssh/nuc.dayview.greentangent.net"}' --vault-password-file secretPassword`
+- Run Ansible code: `ansible-playbook -i inventory.yml site-nuc.yml --vault-password-file vaultPassword`
+
 
 ## Vault stuff
+- Create vault: `ansible-vault create group_vars/all/secrets.yml`
 - Edit vault: `ansible-vault edit group_vars/all/secrets.yml`
 
 
@@ -12,8 +13,3 @@
 - Enter shell: `docker container exec --tty --interactive splunk /bin/bash`
 - Run container: `docker run --rm -it netmon /bin/bash`
 - Build image: `docker image build . --file Dockerfile --tag netmon`
-
-## Rebuild steps
-- Install OS
-- Intall python3 `yum install python3 -y`
-- Run the Ansible code

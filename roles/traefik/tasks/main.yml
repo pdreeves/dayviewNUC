@@ -5,12 +5,12 @@
     path: /opt/traefik/
     state: directory
 
-- name: Copy Certificate to NUC
+- name: Copy Certificate to Pi
   copy:
     src: cert.pem
     dest: /opt/traefik/traefik.crt
 
-- name: Copy Private Key to NUC
+- name: Copy Private Key to Pi
   copy:
     src: privkey.pem
     dest: /opt/traefik/traefik.key
@@ -20,8 +20,8 @@
     src: "{{ item }}"
     dest: "/opt/traefik/{{ item }}"
   with_items:
-    - traefik.yml
     - tlsTraefik.yml
+    - traefik.yml
 
 - name: Manage Traefik Image
   docker_image:
@@ -33,7 +33,7 @@
 - name: Create Traefik Container
   docker_container:
     detach: true
-    name: traefik
+    name: "traefik-{{ shortHostName }}"
     image: traefik
     labels:
       traefik.http.routers.traefik.tls: "true"
@@ -47,8 +47,8 @@
       splunk-url: "{{ containerHECDestination }}"
       splunk-insecureskipverify: true
       splunk-index: containers
-      splunk-source: traefik
-      splunk-sourcetype: syslog
+      splunk-source: "traefik-{{ shortHostName }}"
+      splunk-sourcetype: traefik
       splunk-verify-connection: false
     published_ports:
       - 80:80

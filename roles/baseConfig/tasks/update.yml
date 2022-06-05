@@ -1,15 +1,9 @@
 ---
 
-- name: Install All Non-Kernel Updates
-  yum:
+- name: Install All Updates
+  apt:
     name: "*"
-    exclude: kernel*
     state: latest
-    lock_timeout: 600
-
-- name: Install Kernel Updates
-  yum:
-    name: "kernel*"
-    state: latest
-    lock_timeout: 600
-  notify: Restart Machine
+    update_cache: yes
+    force_apt_get: yes
+    cache_valid_time: 300

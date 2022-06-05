@@ -26,7 +26,7 @@
 - name: Start netmon Container
   docker_container:
     detach: true
-    name: netmon
+    name: "netmon-{{ shortHostName }}"
     image: netmon
     state: started
     restart_policy: unless-stopped
@@ -37,6 +37,6 @@
       splunk-url: "{{ containerHECDestination }}"
       splunk-insecureskipverify: true
       splunk-index: network
-      splunk-source: netmon-dayview
+      splunk-source: "netmon-{{ shortHostName }}"
       splunk-sourcetype: netmon
       splunk-verify-connection: false

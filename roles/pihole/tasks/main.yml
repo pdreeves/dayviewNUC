@@ -11,7 +11,7 @@
     - /opt/pihole
     - /opt/pihole/pihole/
     - /opt/pihole/dnsmasq.d/
-    - /opt/pihole/log/
+    - /var/log/pihole/
 
 - name: Manage pihole image
   docker_image:
@@ -23,7 +23,7 @@
 - name: Create pihole Container
   docker_container:
     detach: true
-    name: pihole
+    name: "pihole-{{ shortHostName }}"
     image: pihole/pihole
     state: started
     restart_policy: unless-stopped
@@ -41,8 +41,8 @@
       splunk-url: "{{ containerHECDestination }}"
       splunk-insecureskipverify: true
       splunk-index: containers
-      splunk-source: pihole-dayview
-      splunk-sourcetype: syslog
+      splunk-source: "pihole-{{ shortHostName }}"
+      splunk-sourcetype: pihole
       splunk-verify-connection: false
     env:
         WEBPASSWORD: "{{ piholeAdminPassword }}"
@@ -51,28 +51,6 @@
         PIHOLE_DNS_: "208.67.222.222;208.67.220.220"
         VIRTUAL_HOST: "{{ piholeName }}"
     volumes:
-      - /opt/pihole/pihole/:/etc/pihole/:Z
-      - /opt/pihole/dnsmasq.d/:/etc/dnsmasq.d/:Z
-      - /opt/pihole/log/pihole.log:/var/log/pihole.log:z
-
-- name: Create Splunk pihole App Folder
-  file:
-    path: /opt/splunkforwarder/etc/apps/greentangent-pihole/local/
-    owner: splunk
-    group: splunk
-    mode: 0744
-    state: directory
-  notify: Restart splunkforwarder
-
-- name: Copy custom app files to host
-  template:
-    src: "{{ item }}.j2"
-    dest: "/opt/splunkforwarder/etc/apps/greentangent-pihole/local/{{item}}"
-    mode: 0644
-    owner: splunk
-    group: splunk
-  notify: Restart splunkforwarder
-  register: confFilesChanged
-  with_items:
-    - inputs.conf
-    - props.conf
+      - /opt/pihole/pihole/:/etc/pihole/
+      - /opt/pihole/dnsmasq.d/:/etc/dnsmasq.d/
+      # - /var/log/pihole/:/var/log/

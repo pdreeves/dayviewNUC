@@ -25,21 +25,21 @@
     - /opt/splunkforwarder/var/lib
     - /opt/splunkforwarder/var/lib/splunk
 
-- name: Set Permissions on /var/log Directories
-  acl:
-    path: /var/log
-    entity: splunk
-    etype: user
-    permissions: rx
-    default: yes
-    recursive: yes
-    state: present
+# - name: Set Permissions on /var/log Directories
+#   acl:
+#     path: /var/log
+#     entity: splunk
+#     etype: user
+#     permissions: rx
+#     default: yes
+#     recursive: yes
+#     state: present
 
-- name: Set Permissions on /var/log Directories
-  acl:
-    path: /var/log
-    entity: splunk
-    etype: user
-    permissions: rx
-    recursive: yes
-    state: present
+# - name: Set Permissions on /var/log Directories
+#   acl:
+#     path: /var/log
+#     entity: splunk
+#     etype: user
+#     permissions: rx
+#     recursive: yes
+#     state: present

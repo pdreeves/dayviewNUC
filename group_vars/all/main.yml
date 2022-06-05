@@ -1,18 +1,9 @@
 ---
 
 # baseConfig
-sshKeys: ['nuc.dayview.greentangent.net.pub']
-sshKeypath: /root/.ssh/
-setSSHKeyLogin: true
-
-# splunk
-rebuildSplunkImage: false
-forceSplunkSource: false
-splunkConfFiles: ['indexes.conf', 'inputs.conf', 'limits.conf', 'props.conf', 'restmap.conf', 'server.conf']
-remoteStorageVolumePath: minio-splunk
-remoteStorageVolumeEndpoint: minio.dayview.greentangent.net
-remoteStorageVolume: minio-splunk
-splunkHECDestination: splunk.dayview.greentangent.net
-
-# Pihole
-piholeName: pihole.dayview.greentangent.net
+packagesToInstall: ['screen', 'vim','python3']
+packagesToRemove: ['rsh', 'rlogin', 'rcp', 'ypserv', 'ypbind', 'tftp', 'tftp-server', 'talk', 'talk-server', 'ftp', 'ftp-server', '@X Window System']
+servicesToEnable: []
+servicesToDisable: []
+sshSettingsPresent: ['Protocol 2', 'LogLevel VERBOSE' , 'PermitRootLogin yes' , 'PermitEmptyPasswords no', 'MaxAuthTries 3', 'X11Forwarding no', 'banner /etc/banner']
+sshSettingsAbsent: ['X11Forwarding yes']

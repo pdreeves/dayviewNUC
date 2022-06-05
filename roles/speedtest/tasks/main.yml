@@ -23,5 +23,5 @@
       splunk-insecureskipverify: true
       splunk-index: containers
       splunk-source: speedtest
-      splunk-sourcetype: syslog
+      splunk-sourcetype: speedtest
       splunk-verify-connection: false

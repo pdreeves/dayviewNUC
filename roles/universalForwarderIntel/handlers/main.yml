@@ -3,3 +3,4 @@
 - name: Restart splunkforwarder
   become_user: splunk
   command: /opt/splunkforwarder/bin/splunk restart
+

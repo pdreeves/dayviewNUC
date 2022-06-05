@@ -7,17 +7,17 @@
     group: splunk
     mode: 0744
     state: directory
+  notify: Restart splunkforwarder
 
 - name: Copy custom app files to host
   template:
-    src: "{{ item }}.j2"
+    src: "{{item}}.j2"
     dest: "/opt/splunkforwarder/etc/apps/greentangent-standardForwarder/local/{{item}}"
     mode: 0644
     owner: splunk
     group: splunk
-  register: confFilesChanged
   notify: Restart splunkforwarder
+  register: confFilesChanged
   with_items:
     - inputs.conf
     - outputs.conf
-    - server.conf

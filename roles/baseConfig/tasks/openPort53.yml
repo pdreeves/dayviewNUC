@@ -1,0 +1,23 @@
+---
+
+- name: Configure DNS server 1
+  ini_file:
+    no_extra_spaces: yes
+    path: /etc/systemd/resolved.conf 
+    section: Resolve
+    option: DNS
+    value: 208.67.222.222
+    state: present 
+
+- name: Configure DNS server 2
+  ini_file:
+    no_extra_spaces: yes
+    path: /etc/systemd/resolved.conf 
+    section: Resolve
+    option: DNSStubListener
+    value: No
+    state: present 
+
+- name: Symlink the new DNS file
+  shell:
+    cmd: ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf

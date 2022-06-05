@@ -16,7 +16,7 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: true
-    defaultRule: "Host(`{{ .Name }}.dayview.greentangent.net`)"
+    defaultRule: "Host(`{{ .Name }}.greentangent.net`)"
   file:
     filename: /opt/external/tlsTraefik.yml
   providersThrottleDuration: 10s

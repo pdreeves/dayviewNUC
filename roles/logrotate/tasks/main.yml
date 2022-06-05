@@ -1,0 +1,12 @@
+---
+
+- name: Install logrotate
+  apt:
+    name: logrotate
+    state: latest
+
+- name: Configure logrotate
+  template:
+    src: main
+    dest: "/etc/logrotate.d/main"
+    mode: 0755

@@ -1,9 +1,0 @@
----
-
-- name: Schedule dnsUpdater Container to Run
-  cron:
-    name: dnsUpdater
-    minute: 11
-    user: root
-    job: 'docker run --rm -e AWS_ACCESS_KEY_ID={{ awsAccessKey }} -e AWS_SECRET_ACCESS_KEY={{ awsSecretKey }} -e AWS_DEFAULT_REGION={{ awsRegion }} -e awsHostedZoneID={{ dnsZoneID }} -e route53RecordName={{ route53RecordName }} --log-driver splunk --log-opt splunk-token={{ containerHECToken }} --log-opt splunk-url="{{ containerHECDestination }}" --log-opt splunk-insecureskipverify=true --log-opt splunk-verify-connection=false --log-opt splunk-index=containers --log-opt splunk-source=dnsupdater --log-opt splunk-sourcetype=syslog dnsupdater'
-

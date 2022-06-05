@@ -1,0 +1,31 @@
+---
+
+- name: Check if Tailscale is installed
+  apt:
+    name: tailscale
+    state: present
+  register: tailScaleInstalled
+  ignore_errors: true
+
+- name: Add TailScale GPG key
+  apt_key:
+    url: https://pkgs.tailscale.com/stable/ubuntu/jammy.noarmor.gpg 
+    state: present
+  when: tailScaleInstalled is failed
+
+- name: Add Tailscale apt repository
+  apt_repository:
+    repo: deb https://pkgs.tailscale.com/stable/ubuntu jammy main
+    state: present
+  when: tailScaleInstalled is failed
+
+- name: Install TailScale
+  apt:
+    name: tailscale
+    state: latest
+  when: tailScaleInstalled is failed
+
+# - name: Print tailscale up output
+#   debug:
+#     var: "Go run `tailscale up` on the device"
+#   when: tailScaleInstalled is failed

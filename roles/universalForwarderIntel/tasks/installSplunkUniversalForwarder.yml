@@ -1,24 +1,42 @@
 ---
 
 - name: Check If Splunk Forwarder is Already Installed
-  yum:
-    name: splunkforwarder.x86_64
-    state: present
-  register: splunkUFInstalled
+  stat:
+    path: /opt/splunkforwarder/bin/splunk
+  register: splunkInstalled
   ignore_errors: true
 
 - name: Download Splunk Universal Forward Binary
   get_url:
-    url: "{{ splunkUFRPMURL }}"
-    dest: /tmp/splunkUF.rpm
-  when: splunkUFInstalled is failed
+    url: "{{ splunkUFURL }}"
+    dest: /tmp/splunkUF.tgz
+  when: not splunkInstalled.stat.exists
 
 - name: Install Splunk Universal Forwarder
-  yum:
-    name: /tmp/splunkUF.rpm
-    state: installed
-    disable_gpg_check: true
-  when: splunkUFInstalled is failed
+  unarchive:
+    src: /tmp/splunkUF.tgz
+    dest: /opt/
+    remote_src: true
+  when: not splunkInstalled.stat.exists
+
+- name: Create splunk user
+  user:
+    name: splunk
+    state: present
+    home: /opt/splunkforwarder
+
+- name: Create splunk user bashrc file
+  file:
+    path: /opt/splunkforwarder/.bashrc
+    state: touch
+    owner: splunk
+    group: splunk
+
+- name: Set SPLUNK_HOME var
+  lineinfile: 
+    path: /opt/splunkforwarder/.bashrc
+    line: "export SPLUNK_HOME=/opt/splunkforwarder"
+    state: present
 
 - name: Configure Splunk user-seed.conf file
   ini_file:
@@ -28,7 +46,7 @@
     section: user_info
     option: USERNAME
     value: admin
-  when: splunkUFInstalled is failed
+  when: not splunkInstalled.stat.exists
 
 - name: Configure Splunk user-seed.conf file round 2
   ini_file:
@@ -37,8 +55,8 @@
     mode: 0700
     section: user_info
     option: PASSWORD
-    value: "{{ splunkUFAdminPassword }}"
-  when: splunkUFInstalled is failed
+    value: "{{splunkUFAdminPassword}}"
+  when: not splunkInstalled.stat.exists
 
 - name: Set Permissions on /opt/splunkforwarder
   file:
@@ -46,21 +64,21 @@
     recurse: yes
     owner: splunk
     group: splunk
-  when: splunkUFInstalled is failed
+  when: not splunkInstalled.stat.exists
 
 - name: Start Splunk For First Time
   become_user: splunk
   command: /opt/splunkforwarder/bin/splunk start --accept-license
-  when: splunkUFInstalled is failed
+  when: not splunkInstalled.stat.exists
 
 - name: Stop Splunk
   become_user: splunk
   command: /opt/splunkforwarder/bin/splunk stop
-  when: splunkUFInstalled is failed
+  when: not splunkInstalled.stat.exists
 
 - name: Enable Splunk to Start on Boot
-  command: /opt/splunkforwarder/bin/splunk enable boot-start -systemd-managed 1 -user splunk
-  when: splunkUFInstalled is failed
+  command: /opt/splunkforwarder/bin/splunk enable boot-start -user splunk -systemd-managed 1
+  when: not splunkInstalled.stat.exists
 
 - name: Verify Splunk user-seed.conf File is Removed
   file:

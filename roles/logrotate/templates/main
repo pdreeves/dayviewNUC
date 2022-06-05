@@ -1,0 +1,35 @@
+/var/log/*.log {
+	hourly
+	missingok
+	rotate 1
+	compress
+	notifempty
+	create
+}
+
+/var/log/*/*.log {
+	hourly
+	missingok
+	rotate 1
+	compress
+	notifempty
+	create
+}
+
+/var/log/messages {
+	hourly
+	missingok
+	rotate 1
+	compress
+	notifempty
+	create
+}
+
+/var/log/journal/*/*.journal {
+	hourly
+	missingok
+	rotate 1
+	compress
+	notifempty
+	create
+}

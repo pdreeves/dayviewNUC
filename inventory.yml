@@ -4,9 +4,9 @@
 all:
   hosts:
     nuc:
-      ansible_host: 192.168.71.200
-      instanceName: nuc.dayview.greentangent.net
+      ansible_host: 100.116.22.70 #192.168.71.200
+      hostname: nuc.greentangent.net
       shortHostName: nuc
       become_user: root
-      ansible_user: centos
-      ansible_python_interpreter: /usr/bin/python3
+      ansible_user: ubuntu
+      piholeName: pihole-nuc.greentangent.net

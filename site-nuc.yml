@@ -1,0 +1,18 @@
+---
+
+ #Configure all Servers
+- hosts: nuc
+  become: true
+  gather_facts: false
+
+  roles:
+    # - baseConfig
+    # - tailscale
+    # - logrotate
+    # - docker
+    # - traefik
+    # - netmon
+    # - speedtest
+    # - pihole
+    # - universalForwarderIntel
+    - unifi

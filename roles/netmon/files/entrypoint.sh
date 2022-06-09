@@ -14,7 +14,7 @@ case "$1" in
    			sleep 5
    			mtr --report -c 5 -i 1 -4 -n 13.33.25.126
    			sleep 5
-   			i=$[$i+1]
+   			i=`expr $i + 1`
    			sleep 240
 		 done 
 		speedtest --json

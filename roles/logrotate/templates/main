@@ -1,7 +1,9 @@
 /var/log/*.log {
 	hourly
+	noolddir
 	missingok
-	rotate 1
+	rotate 3
+	copytruncate
 	compress
 	notifempty
 	create
@@ -9,8 +11,10 @@
 
 /var/log/*/*.log {
 	hourly
+	noolddir
 	missingok
-	rotate 1
+	rotate 3
+	copytruncate
 	compress
 	notifempty
 	create
@@ -18,17 +22,33 @@
 
 /var/log/messages {
 	hourly
+	noolddir
 	missingok
-	rotate 1
+	rotate 3
+	copytruncate
 	compress
 	notifempty
 	create
 }
 
+/var/log/syslog {
+	hourly
+	noolddir
+	missingok
+	rotate 3
+	copytruncate
+	compress
+	notifempty
+	create
+	su syslog adm
+}
+
 /var/log/journal/*/*.journal {
 	hourly
+	noolddir
 	missingok
-	rotate 1
+	rotate 3
+	copytruncate
 	compress
 	notifempty
 	create

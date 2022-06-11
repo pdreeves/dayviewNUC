@@ -10,3 +10,20 @@
     src: main
     dest: "/etc/logrotate.d/main"
     mode: 0755
+
+- name: Configure AppArmor for logrotate
+  template:
+    src: logrotate
+    dest: "/etc/apparmor.d/logrotate"
+    mode: 0755
+
+- name: Reload AppArmor
+  service:
+    name: apparomor
+    status: reloaded
+
+- name: Schedule logrotate
+  cron:
+    name: "Run logrotate"
+    minute: 7
+    job: "logrotate /etc/logrotate.d/main"

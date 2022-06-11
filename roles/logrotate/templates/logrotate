@@ -1,0 +1,82 @@
+# ------------------------------------------------------------------
+#
+#  Copyright (C) 2016-2018 Mikhail Kurinnoi
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of version 2 of the GNU General Public
+#  License published by the Free Software Foundation.
+#
+# ------------------------------------------------------------------
+
+#include <local/tunables.d/>
+
+profile logrotate@{p_root} /usr/sbin/logrotate@{t_root} {
+  #include <abstractions/base>
+  #include <abstractions/nameservice>
+  
+  # CAPABILITIES ---------------------------------------
+  capability setuid,
+  capability setgid,
+  capability fsetid,
+  capability chown,
+  capability fowner,
+  capability dac_override,
+  capability dac_read_search,
+  
+  # PSEUDO ---------------------------------------------
+  /dev/tty[0-9]*          rw,
+  /dev/pts/[0-9]*         rw,
+  
+  # EXECUTABLES ----------------------------------------
+  /usr/sbin/logrotate          mr,
+  @{shell}@{t_root}         Cx,
+  /usr/bin/xz@{t_root}          Cx, # app-arch/xz-utils
+  
+  # READS/WRITES ---------------------------------------
+  /             r,
+  /etc/logrotate.conf         rk,
+  /etc/logrotate.d/         r,
+  /etc/logrotate.d/*          rk,
+  /var/log/           re,
+  /var/log/**           rw,
+  /var/lib/misc/logrotate.*       rw,
+  
+  # NOISY ----------------------------------------------
+  deny @{ROOT_HOME_D}/          r,
+  deny /etc/apparmor.d/         r,
+  
+  profile shell @{shell}@{t_root} {
+    #include <abstractions/base>
+    
+    # PSEUDO -------------------------------------------
+    /dev/tty            rw,
+    
+    # EXECUTABLES --------------------------------------
+    @{shell}            mr,
+    /bin/su@{t_root}          Px, # sys-apps/shadow
+    /etc/init.d/syslog-ng@{t_root}      Px, # app-admin/syslog-ng
+  }
+  
+  profile xz /usr/bin/xz@{t_root} {
+    #include <abstractions/base>
+    
+    # EXECUTABLES --------------------------------------
+    /usr/bin/xz           mr,
+    
+    # READS/WRITES -------------------------------------
+    /var/log/**           rw,
+  }
+}
+
+profile logrotate.cron.daily@{p_root} /etc/cron.daily/logrotate@{t_root} {
+  #include <abstractions/base>
+  
+  # PSEUDO ---------------------------------------------
+  /dev/tty            rw,
+  
+  # EXECUTABLES ----------------------------------------
+  /etc/cron.daily/logrotate       r,
+  @{shell}            mr,
+  /usr/bin/logger@{t_root}        Px, # sys-apps/util-linux
+  /usr/sbin/logrotate@{t_root}       Px,
+}

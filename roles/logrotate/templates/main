@@ -6,7 +6,7 @@
 	copytruncate
 	compress
 	notifempty
-	create
+	create 744
 }
 
 /var/log/*/*.log {
@@ -17,7 +17,7 @@
 	copytruncate
 	compress
 	notifempty
-	create
+	create 744
 }
 
 /var/log/messages {
@@ -28,7 +28,7 @@
 	copytruncate
 	compress
 	notifempty
-	create
+	create 744
 }
 
 /var/log/syslog {
@@ -39,7 +39,7 @@
 	copytruncate
 	compress
 	notifempty
-	create
+	create 744
 	su syslog adm
 }
 
@@ -51,5 +51,5 @@
 	copytruncate
 	compress
 	notifempty
-	create
+	create 744
 }

@@ -21,3 +21,25 @@
   with_items:
     - inputs.conf
     - outputs.conf
+
+- name: Create Splunk local files for Unix TA
+  file:
+    path: "{{ item }}"
+    owner: splunk
+    group: splunk
+    mode: 0744
+    state: directory
+  with_items:
+    - /opt/splunkforwarder/etc/apps/Splunk_TA_nix/
+    - /opt/splunkforwarder/etc/apps/Splunk_TA_nix/local/
+
+
+- name: Copy custom app files to host for Unix TA
+  template:
+    src: unixTAInputs.conf.j2
+    dest: "/opt/splunkforwarder/etc/apps/Splunk_TA_nix/local/inputs.conf"
+    mode: 0644
+    owner: splunk
+    group: splunk
+  notify: Restart splunkforwarder
+  register: confFilesChanged

@@ -1,193 +1,28 @@
-[script://./bin/vmstat_metric.sh]
-disabled = 0
-index = os
-
-[script://./bin/iostat_metric.sh]
-disabled = 0
-index = os
-
-[script://./bin/ps_metric.sh]
-disabled = 0
-index = os
-
-[script://./bin/df_metric.sh]
-disabled = 0
-index = os
-
-[script://./bin/interfaces_metric.sh]
-disabled = 0
-index = os
-
-[script://./bin/cpu_metric.sh]
-disabled = 0
-index = os
-
-[script://./bin/vmstat.sh]
-disabled = 0
-index = os
-
-[script://./bin/iostat.sh]
-disabled = 0
-index = os
-
-[script://./bin/nfsiostat.sh]
-disabled = 0
-index = os
-
-[script://./bin/ps.sh]
-disabled = 0
-index = os
-
-[script://./bin/top.sh]
-disabled = 0
-index = os
-
-[script://./bin/netstat.sh]
-disabled = 0
-index = os
-
-[script://./bin/bandwidth.sh]
-disabled = 0
-index = os
-
-[script://./bin/protocol.sh]
-disabled = 0
-index = os
-
-[script://./bin/openPorts.sh]
-disabled = 0
-index = os
-
-[script://./bin/time.sh]
-disabled = 0
-index = os
-
-[script://./bin/lsof.sh]
-disabled = 0
-index = os
-
-[script://./bin/df.sh]
-disabled = 0
-index = os
-
-[script://./bin/who.sh]
-disabled = 0
-index = os
-
-[script://./bin/usersWithLoginPrivs.sh]
-disabled = 0
-index = os
-
-[script://./bin/lastlog.sh]
-disabled = 0
-index = os
-
-[script://./bin/interfaces.sh]
-disabled = 0
-index = os
-
-[script://./bin/cpu.sh]
-disabled = 0
-index = os
-
-[script://./bin/rlog.sh]
-disabled = 0
-index = os
-
-[script://./bin/package.sh]
-disabled = 0
-index = os
-
-[script://./bin/hardware.sh]
-disabled = 0
-index = os
-
-[monitor:///Library/Logs]
-disabled = 0
-index = os
-
-[monitor:///var/log]
-disabled = 0
-index = os
-
-[monitor:///var/log/syslog]
-disabled = 0
-index = os
-
-
-[monitor:///var/adm]
-disabled = 0
-index = os
-
-[monitor:///etc]
-disabled = 0
-index = os
-
-[monitor:///root/.bash_history]
-disabled = 0
-index = os
-
-[monitor:///home/*/.bash_history]
-disabled = 0
-index = os
-
-[script://./bin/openPortsEnhanced.sh]
-disabled = 0
-index = os
-
-[script://./bin/passwd.sh]
-disabled = 0
-index = os
-
-[script://./bin/selinuxChecker.sh]
-disabled = 0
-index = os
-
-[script://./bin/service.sh]
-disabled = 0
-index = os
-
-[script://./bin/sshdChecker.sh]
-disabled = 0
-index = os
-
-[script://./bin/update.sh]
-disabled = 0
-index = os
-
-[script://./bin/uptime.sh]
-disabled = 0
-index = os
-
-[script://./bin/version.sh]
-disabled = 0
-index = os
-
-[script://./bin/vsftpdChecker.sh]
-disabled = 0
-index = os
-
 # Network inputs
 [udp://192.168.71.1:1514]
 sourcetype = pfsense
 host = pfsense.greentangent.net
 source = 192.168.71.1
 index = network
+no_appending_timestamp = true
 
 [udp://192.168.71.2:1515]
 sourcetype = syslog
 host = officeswitch.greentangent.net
 source = 192.168.71.2
 index = network
+no_appending_timestamp = true
 
 [udp://192.168.71.201:1516]
 sourcetype = syslog
 host = synology.greentangent.net
 source = 192.168.71.201
 index = app
+no_appending_timestamp = true
 
 [udp://:1517]
 sourcetype = ubnt
 host = unifi-controller.greentangent.net
 source = 192.168.71.200
 index = network 
+no_appending_timestamp = true

@@ -12,6 +12,7 @@
     - /opt/pihole/pihole/
     - /opt/pihole/dnsmasq.d/
     - /var/log/pihole/
+    - /var/log/pihole/lighttpd/
 
 - name: Manage pihole image
   docker_image:
@@ -53,4 +54,4 @@
     volumes:
       - /opt/pihole/pihole/:/etc/pihole/
       - /opt/pihole/dnsmasq.d/:/etc/dnsmasq.d/
-      # - /var/log/pihole/:/var/log/
+      - /var/log/pihole:/var/log/:rw

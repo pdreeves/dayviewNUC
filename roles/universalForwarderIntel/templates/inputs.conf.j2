@@ -26,3 +26,8 @@ host = unifi-controller.greentangent.net
 source = 192.168.71.200
 index = network 
 no_appending_timestamp = true
+
+[monitor:///var/log/pihole/pihole.log]
+disabled = 0
+index = dns
+sourcetype = pihole

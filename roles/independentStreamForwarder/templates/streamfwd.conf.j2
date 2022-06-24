@@ -1,0 +1,10 @@
+[streamfwd]
+httpEventCollectorToken = {{ netflowHecToken }}
+indexer.0.uri = {{ containerHECDestination }}
+maxFlows = 8192
+processingThreads = 4
+udpFlowTimeout = 60
+
+netflowReceiver.0.port = 9996
+netflowReceiver.0.decoder = netflow
+netflowReceiver.0.decodingThreads = 4

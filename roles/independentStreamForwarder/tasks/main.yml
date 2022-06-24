@@ -1,0 +1,26 @@
+---
+
+- name: Check if ISF is already installed
+  stat:
+    path: /opt/streamfwd
+  register: splunkISFInstalled
+  ignore_errors: true
+
+- name: Install ISF
+  shell: curl -ksSL https://splunk.greentangent.net:8000/en-us/custom/splunk_app_stream/install_streamfwd | sudo bash -s -- --accept-defaults
+  when: not splunkISFInstalled.stat.exists
+
+- name: Configure ISF
+  template:
+    src: "{{item}}.j2"
+    dest: "/opt/streamfwd/local/{{item}}"
+    mode: 0644
+    owner: splunk
+    group: splunk
+  with_items:
+    - streamfwd.conf
+
+- name: Restart streamfwd
+  service:
+    name: streamfwd
+    state: restarted

@@ -31,3 +31,8 @@ no_appending_timestamp = true
 disabled = 0
 index = dns
 sourcetype = pihole
+
+[monitor:///opt/streamfwd/var/log/streamfwd.log]
+disabled = 0
+index = _internal
+sourcetype = syslog

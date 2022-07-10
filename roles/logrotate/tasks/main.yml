@@ -17,10 +17,10 @@
     dest: "/etc/apparmor.d/logrotate"
     mode: 0755
 
-- name: Reload AppArmor
-  service:
-    name: apparomor
-    status: reloaded
+# - name: Reload AppArmor
+#   service:
+#     name: apparomor
+#     state: reloaded
 
 - name: Schedule logrotate
   cron:

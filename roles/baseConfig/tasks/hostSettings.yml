@@ -17,5 +17,4 @@
 
 - name: Set HostName
   hostname:
-    name: "{{hostname}}"
-    use: debian
+    name: "{{ hostname }}"
